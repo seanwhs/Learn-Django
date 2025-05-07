@@ -1,0 +1,16 @@
+{% extends 'pages/base.html' %}
+{% block content %}
+<body>
+    <h1>Home Page</h1>
+    <p>The current time is: {% now 'DATETIME_FORMAT' %}</p>
+    <br/>
+    <p>There are {{inventory_list|length}} items in invenory</p>
+    <p>
+        <ul>
+            {% for inventory in inventory_list %}
+            <li>{{inventory}}</li>
+            {% endfor %}
+        </ul>
+    </p>
+</body>
+{% endblock  %}
