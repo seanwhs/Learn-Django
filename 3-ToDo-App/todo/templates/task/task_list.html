@@ -1,0 +1,27 @@
+{% extends 'task/base.html' %}
+
+{% block subject %}
+    <h1> Tasks </h1>
+{% endblock %}
+
+<a href="{% url 'create' %}">➕ Add Task</a>
+{% block content %}
+
+<ul>
+    {% for task in tasks %}
+        <li>
+            <strong>{{task.title}}</strong>
+            ({{task.category}})
+            {% if task.is_done %}
+                ✔️
+            {% endif %}
+            <a href="{% url 'update' task.id %}">Edit</a>
+            <a href="{% url 'delete' task.id %}">Delete</a>
+            <hr>
+        </li>
+        {% empty %}
+        <li>No Tasks Found!</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

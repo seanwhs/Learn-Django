@@ -1,42 +1,57 @@
-# todo.views.py
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import Todo
-from .forms import TodoForm
+from django.shortcuts import get_object_or_404, render, redirect
+from .models import Task
+from category.models import Category
+from .forms import TaskForm
 
-def todo_list(request):
-    todos = Todo.objects.all()
-    print(todos)
-    context = {
-        'todo_list': todos
-    }
-    return render(request, 'todo_list.html', context)
 
-def todo_detail(request, todo_id):
-    todo = Todo.objects.get(id=todo_id)
-    context = {'todo': todo }
-    return render (request, 'todo_detail.html', context)
+def list_tasks(request):
+    tasks = Task.objects.all()
+    categories = Category.objects.all()
+    return render(request, 'task/task_list.html', {
+        'tasks': tasks,
+        'categories': categories
+    })
 
-def todo_create(request):
-    form = TodoForm(request.POST or None)
 
-    if form.is_valid():
-        form.save()
-        return redirect('/')  # redirect after saving
+def create_task(request):
+    if request.method == 'POST':
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('list')
+    else:
+        form = TaskForm()
 
-    context = {'form': form}
-    return render(request, 'todo_create.html', context)
+    return render(request, 'task/task_form.html', {
+        'form': form,
+        'action': 'Create'
+    })
 
-def todo_update(request, todo_id):
-    todo = Todo.objects.get(id=todo_id)
-    form = TodoForm(request.POST or None, instance=todo)
-    if form.is_valid():
-        form.save()
-        return redirect('/')  # redirect after saving
-    context = {'form': form}
-    return render(request, 'todo_create.html', context)
 
-def todo_delete(request, todo_id):
-    todo = Todo.objects.get(id=todo_id)
-    todo.delete()
-    return redirect('todos:todo_list')  # redirect after saving
+def update_task(request, id):
+    task = get_object_or_404(Task, id=id)
+
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            return redirect('list')
+    else:
+        form = TaskForm(instance=task)
+
+    return render(request, 'task/task_form.html', {
+        'form': form,
+        'action': 'Update'
+    })
+
+
+def delete_task(request, id):
+    task = get_object_or_404(Task, id=id)
+
+    if request.method == 'POST':
+        task.delete()
+        return redirect('list')
+
+    return render(request, 'task/task_delete.html', {
+        'task': task, 'action': 'Delete'
+    })

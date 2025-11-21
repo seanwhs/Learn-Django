@@ -1,9 +1,16 @@
-from os import name
+# todo app models.py
 from django.db import models
+from category.models import Category
 
-class Todo(models.Model):
-    name = models.CharField(max_length=255)
-    due_date = models.DateField()
+class Task(models.Model):
+    category = models.ForeignKey(Category, related_name='tasks', on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    is_done = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return self.title
+
+    

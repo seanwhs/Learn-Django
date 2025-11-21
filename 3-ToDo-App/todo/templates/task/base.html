@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title%}  {% endblock %}</title>
+</head>
+<body>
+    {% include 'task/partials/nav.html' %}
+
+    {% load tz %}
+        <p><strong>{% now "l, F j, Y — h:i A" %}</strong></p>
+
+    {% block subject %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+    
+    {% include 'task/partials/footer.html' %}
+</body>
+</html>

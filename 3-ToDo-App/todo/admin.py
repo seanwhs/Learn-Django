@@ -1,4 +1,10 @@
 from django.contrib import admin
-from .models import Todo
+from .models import Task
 
-admin.site.register(Todo)
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ('title', 'is_done', 'created_at', 'updated_at',)
+    list_filter = ('category', 'is_done',)
+    search_fields = ('title', 'description',)
+    ordering = ('updated_at',)
+
+admin.site.register(Task, TaskAdmin)

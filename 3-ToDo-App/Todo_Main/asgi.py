@@ -1,5 +1,5 @@
 """
-ASGI config for ToDoApp project.
+ASGI config for Todo_Main project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ToDoApp.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Todo_Main.settings')
 
 application = get_asgi_application()
