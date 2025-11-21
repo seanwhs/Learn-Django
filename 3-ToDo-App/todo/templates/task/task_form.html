@@ -1,17 +1,61 @@
 {% extends 'task/base.html' %}
 
 {% block subject %}
-    <h1>{{action}} Task</h1>
+    <h1>{{ action }} Task</h1>
 {% endblock %}
 
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
 
-        <button type = 'submit'> {{action}} </button>
-        <button><a href="{% url 'list' %}">Cancel</a></button>
-        
-    </form>
+    <form method="POST">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    
+    <div>
+        {{ form.title.label_tag }}
+        {{ form.title }}
+        {{ form.title.errors }}
+    </div>
+
+    <div>
+        {{ form.due_date.label_tag }}
+        {{ form.due_date }}
+        {{ form.due_date.errors }}
+    </div>
+
+    <div>
+        {{ form.category.label_tag }}
+        {{ form.category }}
+        {{ form.category.errors }}
+    </div>
+
+    <div>
+        {{ form.priority.label_tag }}
+        {{ form.priority }}
+        {{ form.priority.errors }}
+    </div>
+
+    <div>
+        {{ form.description.label_tag }}
+        {{ form.description }}
+        {{ form.description.errors }}
+    </div>
+    
+    <div>
+        {{ form.recurrence.label_tag }}
+        {{ form.recurrence }}
+        {{ form.recurrence.errors }}
+    </div>
+
+    <div>
+        {{ form.is_done.label_tag }}
+        {{ form.is_done }}
+        {{ form.is_done.errors }}
+    </div>
+
+    <button type="submit">Save Task</button>
+    <button><a href="{% url 'list' %}">Cancel</a></button>
+
+</form>
+
+
 {% endblock %}
-

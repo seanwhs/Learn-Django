@@ -1,3 +1,30 @@
-<nav>
-    Menu
+<nav style="background-color:#f0f0f0; padding:10px; display:flex; gap:15px; align-items:center;">
+    <a href="{% url 'list' %}">🏠 Home</a>
+    <a href="{% url 'create' %}">➕ Add Task</a>
+    <a href="{% url 'create_category' %}">🗂 Add Category</a>
+
+    {% if categories %}
+    <div style="position:relative;">
+        <button style="background:none;border:none;cursor:pointer;">📂 Categories ▼</button>
+        <ul style="position:absolute; top:100%; left:0; background:#fff; border:1px solid #ccc; padding:5px; margin:0; list-style:none; display:none;">
+            {% for cat in categories %}
+            <li style="padding:2px 5px;">
+                {{ cat.title }}
+                <a href="{% url 'update_category' cat.id %}">✏️</a>
+                <a href="{% url 'delete_category' cat.id %}">🗑</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 </nav>
+
+<script>
+    // Simple dropdown toggle
+    document.querySelectorAll('nav div button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const ul = btn.nextElementSibling;
+            ul.style.display = ul.style.display === 'block' ? 'none' : 'block';
+        });
+    });
+</script>

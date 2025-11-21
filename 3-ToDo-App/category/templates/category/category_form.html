@@ -1,0 +1,20 @@
+{% extends 'task/base.html' %}
+
+{% block subject %}
+    <h1>{{ action }}</h1>
+{% endblock %}
+
+{% block content %}
+<h2>{{ action }} Category</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div>
+        {{ form.title.label_tag }}
+        {{ form.title }}
+        {{ form.title.errors }}
+    </div>
+    <button type="submit">{{ action }}</button>
+</form>
+
+{% endblock %}

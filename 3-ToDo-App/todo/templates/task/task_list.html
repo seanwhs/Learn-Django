@@ -4,15 +4,22 @@
     <h1> Tasks </h1>
 {% endblock %}
 
-<a href="{% url 'create' %}">➕ Add Task</a>
+
 {% block content %}
+<p><a href="{% url 'create' %}">➕ Add Task</a></p>
 
 <ul>
     {% for task in tasks %}
         <li>
             <strong>{{task.title}}</strong>
-            ({{task.category}})
-            ({{task.priority}})
+            (<strong>Category:</strong> {{task.category}})
+            {% if task.due_date %}
+                (<strong>Due:</strong> {{task.due_date}})
+            {% endif %}
+            (<strong>Priority:</strong> {{task.priority}})
+            {% if task.recurrence%}
+                (<strong>Occurrence:</strong> {{task.recurrence}})
+            {% endif%}    
             {% if task.is_done %}
                 ✔️
             {% endif %}
