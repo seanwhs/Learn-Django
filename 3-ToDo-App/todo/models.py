@@ -30,5 +30,13 @@ class Task(models.Model):
             if self.due_date < date.today():
                 raise ValidationError({'due_date': "Due date cannot be in the past."})
 
+    def is_overdue(self):
+        return (
+            self.due_date is not None
+            and self.due_date < date.today()
+            and not self.is_done
+            and not self.recurrence  # recurring tasks never overdue
+        )
+    
     def __str__(self):
         return self.title

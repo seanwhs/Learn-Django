@@ -1,12 +1,14 @@
 # Todo Django Project
 
-A simple **Todo application** built with **Django 5.2**, allowing users to manage tasks, set priorities, assign categories, and track due dates. Includes validation to ensure due dates are today or in the future and automated tests for models, forms, and views.
+A simple **Todo application** built with **Django 5.2**, allowing users to manage tasks, organize categories, set priorities, and track due dates.  
+Now includes **Automatic Overdue Detection**, which highlights overdue tasks and displays a warning banner when tasks are past their due dates.
 
 ---
 
 ## Table of Contents
 
 * [Features](#features)
+* [Automatic Overdue Detection](#automatic-overdue-detection)
 * [Project Structure](#project-structure)
 * [Setup & Installation](#setup--installation)
 * [Models](#models)
@@ -23,20 +25,46 @@ A simple **Todo application** built with **Django 5.2**, allowing users to manag
 
 * Create, update, delete, and list tasks
 * Assign tasks to categories
-* Set task priority: High, Medium, Low
-* Set due date (cannot be in the past)
+* Set priority: High, Medium, Low
+* Set due dates (validated not to be in the past)
 * Mark tasks as done
-* Add new categories dynamically
+* Add categories dynamically
+* **Automatic overdue detection with visual alerts**
 * Fully tested with unit and integration tests
+
+---
+
+## Automatic Overdue Detection
+
+This feature automatically identifies tasks that are overdue based on today's date.
+
+### How It Works
+
+1. Each task has a method `is_overdue()` that checks:
+   - Task has a due date  
+   - Due date is before today  
+   - Task is **not done**  
+   - Task is **not recurring**  
+
+2. Your `list_tasks` view counts overdue tasks and exposes that number to the template.
+
+3. The `task_list.html` template:
+   - Highlights overdue tasks with a red border  
+   - Shows a warning alert inside each overdue task  
+   - Displays a top banner:  
+     **⚠️ You have X overdue tasks!**
+
+4. Optional CSS improves the visibility of overdue tasks.
 
 ---
 
 ## Project Structure
 
 ```
+
 Todo_Main/
 │
-├─ todo/                  # Main app for task management
+├─ todo/
 │  ├─ admin.py
 │  ├─ apps.py
 │  ├─ forms.py
@@ -50,12 +78,12 @@ Todo_Main/
 │      ├─ task_list.html
 │      └─ task_delete.html
 │
-├─ category/              # App for task categories
+├─ category/
 │  ├─ admin.py
 │  ├─ forms.py
 │  ├─ models.py
-│  ├─ views.py
 │  ├─ urls.py
+│  ├─ views.py
 │  └─ templates/category/
 │      └─ category_form.html
 │
@@ -65,81 +93,102 @@ Todo_Main/
 │  └─ wsgi.py
 │
 └─ db.sqlite3
-```
+
+````
 
 ---
 
 ## Setup & Installation
 
-1. Clone the repository:
+### 1. Clone the repository
 
 ```bash
 git clone <repo-url>
 cd Todo_Main
-```
+````
 
-2. Create a virtual environment:
+### 2. Create a virtual environment
 
 ```bash
 python -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
+source venv/bin/activate       # Windows: venv\Scripts\activate
 ```
 
-3. Install dependencies:
+### 3. Install dependencies
 
 ```bash
 pip install django
 ```
 
-4. Apply migrations:
+### 4. Apply migrations
 
 ```bash
 python manage.py migrate
 ```
 
-5. Run the development server:
+### 5. Run the development server
 
 ```bash
 python manage.py runserver
 ```
 
-6. Access the app at: `http://127.0.0.1:8000/`
+Visit: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 
 ---
 
 ## Models
 
-### `Category`
+### Category Model
 
-* Represents a task category (e.g., Work, Personal)
-* Fields: `title`
-* Admin: listed alphabetically, plural as **Categories**
+* Includes a normalized `title` field (`strip()` + `title()`)
+* Prevents duplicate category names
+* Used to group tasks
 
-### `Task`
+### Task Model
 
-* Represents a task with:
-  * `category` → ForeignKey to `Category`
-  * `title`, `description`, `is_done`
-  * `priority` → High, Medium, Low
-  * `due_date` → validated not to be in the past
-  * Timestamps: `created_at`, `updated_at`
-* Model validation ensures `due_date >= today`
+* Fields:
+
+  * `category`
+  * `title`, `description`
+  * `priority`
+  * `due_date`
+  * `is_done`
+  * `recurrence`
+  * timestamps
+
+* Validates:
+
+  * One-time tasks must have a due date
+  * Due dates cannot be in the past
+  * Recurring tasks cannot be marked done
+
+### Overdue Logic
+
+```python
+def is_overdue(self):
+    return (
+        self.due_date is not None
+        and self.due_date < date.today()
+        and not self.is_done
+        and not self.recurrence
+    )
+```
 
 ---
 
 ## Forms
 
-### `TaskForm`
+### TaskForm
 
-* ModelForm for creating/updating tasks
-* Fields: `category`, `priority`, `due_date`, `title`, `description`, `is_done`
-* Uses Django's form validation; model `clean()` enforces due date rules
+* HTML5 date picker (`type="date"`)
+* Applies model validation
+* Fields: category, title, description, priority, due_date, recurrence, is_done
 
-### `CategoryForm`
+### CategoryForm
 
-* ModelForm for adding new categories
-* Fields: `title`
-* Simple input placeholder: `"New Category"`
+* Normalizes title input
+* Prevents duplicates
+* Used for adding categories directly from the UI
 
 ---
 
@@ -147,19 +196,19 @@ python manage.py runserver
 
 ### Todo App Views
 
-* `list_tasks` → shows all tasks
-* `create_task` → create new task
-* `update_task` → edit existing task
-* `delete_task` → confirm and delete task
-
-All views use **TaskForm** and enforce model validation with `full_clean()` before saving.
+* `list_tasks` — Shows all tasks + overdue count
+* `create_task` — Add a task
+* `update_task` — Edit a task
+* `delete_task` — Delete a task with confirmation
 
 ### Category App Views
 
-* `create_category` → add a new category dynamically via `CategoryForm`
-* Redirects to task list after creation
+* Create, update, delete categories
+* Uses custom validation to prevent duplicates
 
-### Todo App URLs (`todo/urls.py`)
+---
+
+### Todo URLs (`todo/urls.py`)
 
 ```python
 urlpatterns = [
@@ -170,27 +219,23 @@ urlpatterns = [
 ]
 ```
 
-### Category App URLs (`category/urls.py`)
+### Category URLs (`category/urls.py`)
 
 ```python
-from django.urls import path
-from .views import create_category
-
 urlpatterns = [
     path('create/', create_category, name='create_category'),
+    path('update/<int:id>/', update_category, name='update_category'),
+    path('delete/<int:id>/', delete_category, name='delete_category'),
 ]
 ```
 
 ### Main Project URLs (`Todo_Main/urls.py`)
 
 ```python
-from django.contrib import admin
-from django.urls import path, include
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('todo.urls')),
-    path('category', include('category.urls')),
+    path('category/', include('category.urls')),
 ]
 ```
 
@@ -198,54 +243,79 @@ urlpatterns = [
 
 ## Templates
 
-* **base.html** → base layout including header, nav, footer, and date/time display
+### base.html
 
-### Navigation Menu
+* Contains navigation layout and shared structure.
+
+### task_list.html
+
+Now supports:
+
+**Overdue banner:**
 
 ```html
-<nav style="background-color:#f0f0f0; padding:10px; display:flex; gap:15px;">
-    <a href="{% url 'list' %}">🏠 Home</a>
-    <a href="{% url 'create' %}">➕ Add Task</a>
-    <a href="{% url 'create_category' %}">🗂 Add Category</a>
-</nav>
-<hr>
+{% if overdue_count > 0 %}
+<div class="alert alert-warning">
+    ⚠️ You have {{ overdue_count }} overdue task{{ overdue_count|pluralize }}!
+</div>
+{% endif %}
 ```
 
-* **task_list.html** → lists tasks with edit/delete links
-* **task_form.html** → create/update task form
-* **task_delete.html** → delete confirmation
-* **category_form.html** → add category form
+**Overdue highlighting:**
 
-Uses Django template inheritance and `{% block %}` sections.
+```html
+<li class="{% if task.is_overdue %}overdue{% endif %}">
+```
+
+### task_form.html
+
+* Displays form for creating/updating tasks
+
+### task_delete.html
+
+* Confirmation page for deletion
+
+### category_form.html
+
+* Add/update categories
 
 ---
 
 ## Admin Panel
 
-* `Category` and `Task` registered in admin.
-* TaskAdmin includes:
-  * List display: title, priority, due_date, is_done, timestamps
-  * Filters: category, is_done
-  * Search: title, description
+* Both Task and Category models are fully registered.
+* Admin features:
+
+  * List display for tasks
+  * Filters for status and category
+  * Search fields
+  * Automatic ordering
 
 ---
 
 ## Testing
 
-Located in `todo/tests.py`:
+Stored in `todo/tests.py`.
 
-* **Model Tests**: task creation, due date validation, `__str__`
-* **Form Tests**: validation and model `full_clean()` enforcement
-* **View Tests**: task listing, creation, updating, deletion
+Tests include:
+
+* Model tests (validation, overdue logic)
+* Form tests
+* View/URL tests
+* Template rendering tests
 
 Run tests:
 
 ```bash
-python manage.py test todo
+python manage.py test
 ```
 
 ---
 
 ## License
 
-MIT License – free to use and modify.
+MIT License — free to use, modify, and distribute.
+
+```
+
+

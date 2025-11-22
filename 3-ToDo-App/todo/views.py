@@ -7,7 +7,15 @@ from category.models import Category
 def list_tasks(request):
     tasks = Task.objects.all()
     categories = Category.objects.all()
-    return render(request, 'task/task_list.html', {'tasks': tasks, 'categories': categories})
+
+    overdue_count = sum(1 for t in tasks if t.is_overdue())
+
+    return render(request, 'task/task_list.html', {
+        'tasks': tasks,
+        'categories': categories,
+        'overdue_count': overdue_count,
+    })
+
 
 def create_task(request):
     form = TaskForm(request.POST or None)
