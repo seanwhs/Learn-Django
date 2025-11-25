@@ -1,0 +1,96 @@
+<!-- _main_sidebar.html -->
+
+{% load static %}
+
+{% block main_sidebar %}
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+    <!-- BRAND LOGO -->
+    {% block logo %}
+    <a href="/" class="brand-link">
+        <img src="{% static 'logo.png' %}"
+            alt="My Logo"
+            class="img-circle elevation-3"
+            style="height:40px; width:auto;">
+        <span class="brand-text font-weight-light">DemoApp</span>
+    </a>
+    {% endblock logo %}
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <!-- OPTIONAL USER PANEL -->
+        {% block user_panel %}
+        <!-- Remove or customize -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{% static 'avatar.png' %}"
+                    class="img-circle elevation-2"
+                    alt="User Image">
+            </div>
+            <div class="info">
+                <a href="#" class="d-block">{{ request.user.username }}</a>
+            </div>
+        </div>
+        {% endblock user_panel %}
+
+        <!-- MENU HEADER -->
+        <div class="nav-header">
+            {% block nav_heading %}NAVIGATION{% endblock nav_heading %}
+        </div>
+
+        <!-- MENU LINKS -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column">
+
+                {% block nav_links %}
+
+                <!-- HOME LINK -->
+                <li class="nav-item">
+                    <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">
+                        <i class="nav-icon fas fa-home"></i>
+                        <p>Home</p>
+                    </a>
+                </li>
+
+                <!-- ADMIN -->
+                <li class="nav-item">
+                    <a href="/admin" class="nav-link">
+                        <i class="nav-icon fas fa-cog"></i>
+                        <p>Admin</p>
+                    </a>
+                </li>
+
+                <!-- COLLAPSIBLE MENU EXAMPLE -->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-folder"></i>
+                        <p>
+                            Sections
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/section/a" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Section A</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/section/b" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Section B</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                {% endblock nav_links %}
+            </ul>
+        </nav>
+
+    </div>
+</aside>
+{% endblock main_sidebar %}
