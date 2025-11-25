@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AdminLTE + Django — Full Tutorial Reference</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+h1 { text-align: center; margin-bottom: 40px; }
+h2 { margin-top: 30px; cursor: pointer; }
+ul { list-style-type: none; padding-left: 0; }
+ul li { margin: 5px 0; }
+a { text-decoration: none; color: #1a73e8; }
+a:hover { text-decoration: underline; }
+hr { margin: 40px 0; border: 0; border-top: 1px solid #ccc; }
+code, pre { background-color: #f5f5f5; padding: 2px 4px; border-radius: 4px; }
+pre { overflow-x: auto; }
+.collapsible { background-color: #f1f1f1; padding: 10px; border-radius: 4px; border: 1px solid #ccc; margin-bottom: 10px; }
+.content { display: none; padding: 10px 20px; border-left: 2px solid #1a73e8; background-color: #fafafa; border-radius: 4px; }
+</style>
+<script>
+function toggleContent(id) {
+    var content = document.getElementById(id);
+    if (content.style.display === "block") {
+        content.style.display = "none";
+    } else {
+        content.style.display = "block";
+    }
+}
+</script>
+</head>
+<body>
+
+<h1>AdminLTE + Django — Full Tutorial Reference</h1>
+
+<h2>Table of Contents — Tutorial</h2>
+<ul>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-1')">1 — Create Project Environment</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-2')">2 — Install Django & django-adminlte3</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-3')">3 — Create a New Django Project and App</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-4')">4 — Create a Superuser</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-5')">5 — Enable django-adminlte3 Templates</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-6')">6 — Create a Simple View Using AdminLTE Base Template</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-7')">7 — Add URL Routing</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-8')">8 — How Template Inheritance Works</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-9')">9 — Override the Sidebar</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-10')">10 — Override Header and Footer</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-11')">11 — How Header, Sidebar, Content, Footer Fit Together</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-12')">12 — High-Level Template Flow</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-13')">13 — Visual Diagram of AdminLTE Layout</a></li>
+</ul>
+
+<h2>Table of Contents — Optional Sections A → Z</h2>
+<ul>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-a')">A — Cards, Tables, and Forms</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-b')">B — Custom Top-Right User Menu</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-c')">C — Dashboard with Charts (Chart.js)</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-d')">D — Custom Base Template</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-e')">E — Alerts & Django Messages</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-f')">F — Modals (Pop-ups)</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-g')">G — Buttons & UI Components</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-h')">H — Form Validation Styling</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-i')">I — Sidebar Collapsible Menu (Treeview)</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-j')">J — DataTables Integration</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-k')">K — Layout Options</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-l')">L — FontAwesome Pro / Icon Packs</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-m')">M — Reusable Components ({% include %})</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-n')">N — Toast Notifications (SweetAlert2 + Toastr)</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-o')">O — Widgets: Info Boxes, Small Boxes, Stat Cards</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-p')">P — Timeline Component</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-q')">Q — Mailbox UI and Chat UI</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-r')">R — Kanban Board Integration</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-s')">S — File Uploads with Preview (bs-custom-file-input)</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-t')">T — Pace Loader (AJAX Progress Bar)</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-u')">U — Control Sidebar (Right Sidebar Panel)</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-v')">V — AdminLTE Plugins (Select2, Summernote, DateRangePicker)</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-w')">W — Dynamic Sidebar Using Database Menus</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-x')">X — CRUD UI (Create, Edit, Delete)</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-y')">Y — Django REST Framework Integration</a></li>
+    <li><a href="javascript:void(0);" onclick="toggleContent('section-z')">Z — Deployment with Nginx + Gunicorn</a></li>
+</ul>
+
+<hr>
+
+<!-- Tutorial Sections -->
+<div class="collapsible" onclick="toggleContent('section-1-content')">1 — Create Project Environment</div>
+<div class="content" id="section-1-content">
+<p>Create and activate a virtual environment:</p>
+<pre><code>virtualenv venv
+.\venv\Scripts\activate   # Windows
+source venv/bin/activate  # Mac/Linux
+</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-2-content')">2 — Install Django & django-adminlte3</div>
+<div class="content" id="section-2-content">
+<pre><code>pip install django django-adminlte3
+pip install django-adminlte3-admin  # Optional for Admin styling
+</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-3-content')">3 — Create a New Django Project and App</div>
+<div class="content" id="section-3-content">
+<pre><code>django-admin startproject DemoAdminLTE3 .
+py manage.py startapp DemoApp
+py manage.py makemigrations
+py manage.py migrate
+</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-4-content')">4 — Create a Superuser</div>
+<div class="content" id="section-4-content">
+<pre><code>py manage.py createsuperuser
+py manage.py runserver
+</code></pre>
+<p>Visit:</p>
+<ul>
+<li>App root → <a href="http://127.0.0.1:8000/" target="_blank">http://127.0.0.1:8000/</a></li>
+<li>Admin → <a href="http://127.0.0.1:8000/admin/" target="_blank">http://127.0.0.1:8000/admin/</a></li>
+</ul>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-5-content')">5 — Enable django-adminlte3 Templates</div>
+<div class="content" id="section-5-content">
+<p>Add to <code>INSTALLED_APPS</code> in <code>settings.py</code>:</p>
+<pre><code>INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    
+    'DemoApp',
+    
+    'adminlte3',
+    'adminlte3_theme',
+]</code></pre>
+<p>Ensure your template directory is enabled:</p>
+<pre><code>'DIRS': [BASE_DIR / "templates"],   # Important
+</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-6-content')">6 — Create a Simple View Using AdminLTE Base Template</div>
+<div class="content" id="section-6-content">
+<p>Create <code>DemoApp/templates/demoapp/home.html</code>:</p>
+<pre><code>{% raw %}{% extends "adminlte/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4">Welcome to AdminLTE Demo</h1>
+    <p>This page uses the AdminLTE3 layout!</p>
+</div>
+{% endblock %}{% endraw %}</code></pre>
+
+<p>View in <code>DemoApp/views.py</code>:</p>
+<pre><code>from django.shortcuts import render
+
+def home(request):
+    return render(request, 'demoapp/home.html')
+</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-7-content')">7 — Add URL Routing</div>
+<div class="content" id="section-7-content">
+<p>Create <code>DemoApp/urls.py</code>:</p>
+<pre><code>from django.urls import path
+from .views import home
+
+urlpatterns = [
+    path('', home, name='home'),
+]</code></pre>
+
+<p>Include in <code>DemoAdminLTE3/urls.py</code>:</p>
+<pre><code>from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('DemoApp.urls')),
+]</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-8-content')">8 — How Template Inheritance Works</div>
+<div class="content" id="section-8-content">
+<p>Template hierarchy:</p>
+<pre><code>home.html
+  ↓ extends
+adminlte/base.html
+  ↓ includes
+_main_header.html
+_main_sidebar.html
+_main_footer.html
+</code></pre>
+<p>Django allows overriding any AdminLTE template by recreating its folder structure in <code>templates/</code>.</p>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-9-content')">9 — Override the Sidebar</div>
+<div class="content" id="section-9-content">
+<p>Original template location:</p>
+<pre><code>adminlte3/templates/adminlte/lib/_main_sidebar.html</code></pre>
+
+<p>Override in project:</p>
+<pre><code>project_root/
+    templates/
+        adminlte/
+            lib/
+                _main_sidebar.html
+</code></pre>
+
+<p>Supports nested blocks: <code>logo</code>, <code>user_panel</code>, <code>nav_links</code>.</p>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-10-content')">10 — Override Header and Footer</div>
+<div class="content" id="section-10-content">
+<p>Create:</p>
+<pre><code>templates/adminlte/lib/_main_header.html
+templates/adminlte/lib/_main_footer.html</code></pre>
+<p>Add navigation links, user profile, and footer content.</p>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-11-content')">11 — How Header, Sidebar, Content, Footer Fit Together</div>
+<div class="content" id="section-11-content">
+<pre><code><div class="wrapper">
+    {% block main_header %}{% endblock %}
+    {% block main_sidebar %}{% endblock %}
+    <div class="content-wrapper">{% block content %}{% endblock %}</div>
+    {% block main_footer %}{% endblock %}
+</div></code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-12-content')">12 — High-Level Template Flow</div>
+<div class="content" id="section-12-content">
+<pre><code>home.html
+  ↓ extends
+adminlte/base.html
+  ↓ injects
+_main_header.html
+_main_sidebar.html
+_main_footer.html
+</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-13-content')">13 — Visual Diagram of AdminLTE Layout</div>
+<div class="content" id="section-13-content">
+<pre><code>
+┌───────────────────────────────────────────────┐
+│                  MAIN HEADER                  │
+└───────────────────────────────────────────────┘
+
+┌───────────────┬───────────────────────────────┐
+│   SIDEBAR     │       CONTENT WRAPPER         │
+└───────────────┴───────────────────────────────┘
+
+┌───────────────────────────────────────────────┐
+│                  MAIN FOOTER                  │
+└───────────────────────────────────────────────┘
+</code></pre>
+</div>
+
+<!-- Optional Sections A-Z -->
+<div class="collapsible" onclick="toggleContent('section-a-content')">A — Cards, Tables, and Forms</div>
+<div class="content" id="section-a-content">
+<p>Use AdminLTE cards, tables, and forms in your pages:</p>
+<pre><code>{% raw %}<div class="card card-primary">
+  <div class="card-header">Title</div>
+  <div class="card-body">
+    Card content here
+  </div>
+</div>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-b-content')">B — Custom Top-Right User Menu</div>
+<div class="content" id="section-b-content">
+<p>Override <code>_main_header.html</code> to add a dropdown with profile, settings, and logout:</p>
+<pre><code>{% raw %}<ul class="navbar-nav ml-auto">
+  <li class="nav-item dropdown">
+    <a class="nav-link" data-toggle="dropdown" href="#">User</a>
+    <div class="dropdown-menu dropdown-menu-right">
+      <a href="/profile" class="dropdown-item">Profile</a>
+      <a href="/logout" class="dropdown-item">Logout</a>
+    </div>
+  </li>
+</ul>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-c-content')">C — Dashboard with Charts (Chart.js)</div>
+<div class="content" id="section-c-content">
+<p>Use Chart.js in AdminLTE cards:</p>
+<pre><code>{% raw %}<canvas id="myChart"></canvas>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Jan', 'Feb', 'Mar'],
+        datasets: [{ label: 'Sales', data: [10, 20, 30] }]
+    }
+});
+</script>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-d-content')">D — Custom Base Template</div>
+<div class="content" id="section-d-content">
+<p>Create a custom base template to extend AdminLTE's base:</p>
+<pre><code>{% raw %}{% extends "adminlte/base.html" %}
+
+{% block main_header %}
+<!-- Custom header -->
+{% endblock %}
+
+{% block main_sidebar %}
+<!-- Custom sidebar -->
+{% endblock %}
+
+{% block content %}
+<!-- Custom content -->
+{% endblock %}
+
+{% block main_footer %}
+<!-- Custom footer -->
+{% endblock %}{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-e-content')">E — Alerts & Django Messages</div>
+<div class="content" id="section-e-content">
+<p>Display Django messages with AdminLTE alerts:</p>
+<pre><code>{% raw %}{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+{% endif %}{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-f-content')">F — Modals (Pop-ups)</div>
+<div class="content" id="section-f-content">
+<p>Add Bootstrap/AdminLTE modals:</p>
+<pre><code>{% raw %}<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch Modal
+</button>
+
+<div class="modal fade" id="exampleModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal Title</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">Modal body content here</div>
+    </div>
+  </div>
+</div>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-g-content')">G — Buttons & UI Components</div>
+<div class="content" id="section-g-content">
+<p>Use AdminLTE buttons and UI components:</p>
+<pre><code>{% raw %}<button class="btn btn-success">Success Button</button>
+<button class="btn btn-danger">Danger Button</button>
+<div class="badge badge-primary">Badge</div>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-h-content')">H — Form Validation Styling</div>
+<div class="content" id="section-h-content">
+<p>Bootstrap form validation example:</p>
+<pre><code>{% raw %}<form method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <input type="text" class="form-control {% if form.name.errors %}is-invalid{% endif %}" name="name">
+    <div class="invalid-feedback">{{ form.name.errors }}</div>
+  </div>
+</form>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-i-content')">I — Sidebar Collapsible Menu (Treeview)</div>
+<div class="content" id="section-i-content">
+<p>Example of a collapsible sidebar menu:</p>
+<pre><code>{% raw %}<li class="nav-item has-treeview">
+  <a href="#" class="nav-link">
+    <p>
+      Menu
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item"><a href="#" class="nav-link">Submenu 1</a></li>
+    <li class="nav-item"><a href="#" class="nav-link">Submenu 2</a></li>
+  </ul>
+</li>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-j-content')">J — DataTables Integration</div>
+<div class="content" id="section-j-content">
+<p>Integrate DataTables in AdminLTE:</p>
+<pre><code>{% raw %}<table id="example1" class="table table-bordered table-striped">
+  <thead>
+    <tr><th>Name</th><th>Age</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>John</td><td>30</td></tr>
+  </tbody>
+</table>
+
+<script>
+$(function () {
+  $("#example1").DataTable();
+});
+</script>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-k-content')">K — Layout Options</div>
+<div class="content" id="section-k-content">
+<p>AdminLTE layout options:</p>
+<ul>
+  <li>Fixed sidebar/navbar: <code>layout-fixed</code></li>
+  <li>Dark mode: <code>dark-mode</code></li>
+  <li>Sidebar collapse: <code>sidebar-collapse</code></li>
+  <li>Boxed layout: <code>layout-boxed</code></li>
+</ul>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-l-content')">L — FontAwesome Pro / Icon Packs</div>
+<div class="content" id="section-l-content">
+<p>Load FontAwesome Pro icons:</p>
+<pre><code>{% raw %}<link href="https://kit.fontawesome.com/your-kit-code.js" rel="stylesheet">{% endraw %}</code></pre>
+<p>Use in buttons or menus:</p>
+<pre><code>{% raw %}<i class="fas fa-user"></i> Profile{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-m-content')">M — Reusable Components ({% include %})</div>
+<div class="content" id="section-m-content">
+<p>Create partials:</p>
+<pre><code>{% raw %}<!-- templates/includes/navbar.html -->
+<nav>Navbar Content</nav>{% endraw %}</code></pre>
+<p>Include in pages:</p>
+<pre><code>{% raw %}{% include 'includes/navbar.html' %}{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-n-content')">N — Toast Notifications (SweetAlert2 + Toastr)</div>
+<div class="content" id="section-n-content">
+<p>Example Toastr notification:</p>
+<pre><code>{% raw %}<script>
+toastr.success('Data saved successfully!');
+</script>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-o-content')">O — Widgets: Info Boxes, Small Boxes, Stat Cards</div>
+<div class="content" id="section-o-content">
+<pre><code>{% raw %}<div class="small-box bg-info">
+  <div class="inner"><h3>150</h3><p>New Orders</p></div>
+  <div class="icon"><i class="ion ion-bag"></i></div>
+</div>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-p-content')">P — Timeline Component</div>
+<div class="content" id="section-p-content">
+<p>Example timeline:</p>
+<pre><code>{% raw %}<div class="timeline">
+  <div class="time-label"><span class="bg-red">10 Feb. 2025</span></div>
+  <div><i class="fas fa-envelope bg-blue"></i><div class="timeline-item"><h3 class="timeline-header">Event Title</h3></div></div>
+</div>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-q-content')">Q — Mailbox UI and Chat UI</div>
+<div class="content" id="section-q-content">
+<p>Use AdminLTE mailbox widget:</p>
+<pre><code>{% raw %}<a href="#" class="mailbox-read-message">Message Title</a>{% endraw %}</code></pre>
+<p>Chat widget:</p>
+<pre><code>{% raw %}<div class="direct-chat-msg">
+  <div class="direct-chat-text">Hello!</div>
+</div>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-r-content')">R — Kanban Board Integration</div>
+<div class="content" id="section-r-content">
+<p>Use AdminLTE cards in Kanban columns:</p>
+<pre><code>{% raw %}<div class="kanban-column">
+  <div class="card">Task 1</div>
+</div>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-s-content')">S — File Uploads with Preview (bs-custom-file-input)</div>
+<div class="content" id="section-s-content">
+<pre><code>{% raw %}<div class="custom-file">
+  <input type="file" class="custom-file-input" id="customFile">
+  <label class="custom-file-label" for="customFile">Choose file</label>
+</div>
+<script>bsCustomFileInput.init();</script>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-t-content')">T — Pace Loader (AJAX Progress Bar)</div>
+<div class="content" id="section-t-content">
+<p>Add Pace loader:</p>
+<pre><code>{% raw %}<script src="plugins/pace/pace.min.js"></script>
+<link rel="stylesheet" href="plugins/pace/pace-theme-minimal.css">{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-u-content')">U — Control Sidebar (Right Sidebar Panel)</div>
+<div class="content" id="section-u-content">
+<pre><code>{% raw %}<aside class="control-sidebar control-sidebar-dark">
+  <div class="p-3">Sidebar content</div>
+</aside>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-v-content')">V — AdminLTE Plugins (Select2, Summernote, DateRangePicker)</div>
+<div class="content" id="section-v-content">
+<pre><code>{% raw %}<select class="select2" style="width:100%"></select>
+<textarea class="summernote"></textarea>
+<input type="text" class="daterangepicker">{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-w-content')">W — Dynamic Sidebar Using Database Menus</div>
+<div class="content" id="section-w-content">
+<p>Example: query sidebar items from DB in view:</p>
+<pre><code>menus = Menu.objects.all()
+return render(request, 'demoapp/home.html', {'menus': menus})</code></pre>
+<p>Loop in sidebar template:</p>
+<pre><code>{% raw %}{% for menu in menus %}<li>{{ menu.title }}</li>{% endfor %}{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-x-content')">X — CRUD UI (Create, Edit, Delete)</div>
+<div class="content" id="section-x-content">
+<p>Example CRUD links in table:</p>
+<pre><code>{% raw %}<a href="{% url 'edit' item.id %}">Edit</a>
+<a href="{% url 'delete' item.id %}">Delete</a>{% endraw %}</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-y-content')">Y — Django REST Framework Integration</div>
+<div class="content" id="section-y-content">
+<p>Install DRF:</p>
+<pre><code>pip install djangorestframework</code></pre>
+<p>Add to <code>INSTALLED_APPS</code> and create serializers/views:</p>
+<pre><code>from rest_framework import serializers, viewsets
+from .models import Item
+
+class ItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
+        fields = '__all__'
+
+class ItemViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer</code></pre>
+</div>
+
+<div class="collapsible" onclick="toggleContent('section-z-content')">Z — Deployment with Nginx + Gunicorn</div>
+<div class="content" id="section-z-content">
+<p>Example Gunicorn start:</p>
+<pre><code>gunicorn DemoAdminLTE3.wsgi:application --bind 0.0.0.0:8000</code></pre>
+<p>Sample Nginx server block:</p>
+<pre><code>server {
+    listen 80;
+    server_name yourdomain.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}</code></pre>
+</div>
+
+</body>
+</html>
