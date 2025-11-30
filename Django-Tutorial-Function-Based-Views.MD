@@ -124,7 +124,7 @@ def book_update(request, pk):
         form = BookForm(request.POST, instance=book)
         if form.is_valid():
             form.save()
-            return redirect('book_list')
+            return redirect('book_detail', pk=book.pk)
     else:
         form = BookForm(instance=book)
     return render(request, 'myapp/book_form.html', {'form': form})
