@@ -1,0 +1,31 @@
+<!-- templates/authentication/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Django AuthN{% endblock %}</title>
+</head>
+<body>
+<header>
+    <h1>Django AuthN Tutorial</h1>
+    <nav>
+        <a href="{% url 'home' %}">Home</a>
+        {% if user.is_authenticated %}
+            <span>Hello, {{ user.first_name }}</span>
+            <a href="{% url 'signout' %}">Sign Out</a>
+        {% else %}
+            <a href="{% url 'signin' %}">Sign In</a>
+            <a href="{% url 'signup' %}">Sign Up</a>
+        {% endif %}
+    </nav>
+</header>
+
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+{% block content %}{% endblock %}
+</body>
+</html>
